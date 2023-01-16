@@ -1,19 +1,14 @@
 const express = require("express");
-const assert = require("assert");
-
-// eslint-disable-next-line no-undef
-const port = process.env.PORT || 3000;
-assert(port, "Port is not defined.");
 
 const app = express();
 const bookRouter = express.Router();
+const port = process.env.PORT || 3000;
 
 bookRouter.route("/books")
     .get((req, res) => {
-        const response = {
-            hello: "This is my API"
-        };
-        res.json(response);
+        res.json({
+            title: "hello"
+        });
     });
 
 app.use("/api", bookRouter);
