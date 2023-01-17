@@ -40,7 +40,22 @@ function booksRepo() {
         })
     }
 
-    return { getAll, getById };
+    async function add(book) {
+        return new Promise(async (resolve, rejects) => {
+            const client = new MongoClient(dbUrl);
+            try {
+                await client.connect();
+                const db = client.db(dbName)
+                const result = db.collection(booksTableName).insertOne(book);
+                resolve((await result).insertedId);
+                await client.close();
+            } catch (error) {
+                rejects(error);
+            }
+        })
+    }
+
+    return { getAll, getById, add };
 }
 
 module.exports = booksRepo();
