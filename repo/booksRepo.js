@@ -70,7 +70,22 @@ function booksRepo() {
         })
     }
 
-    return { getAll, getById, add, update };
+    async function remove(id) {
+        return new Promise(async (resolve, rejects) => {
+            const client = new MongoClient(dbUrl);
+            try {
+                await client.connect();
+                const db = client.db(dbName)
+                const result = await db.collection(booksTableName).deleteOne({ _id: ObjectId(id) });
+                resolve(result.deletedCount);
+                await client.close();
+            } catch (error) {
+                rejects(error);
+            }
+        })
+    }
+
+    return { getAll, getById, add, update, remove };
 }
 
 module.exports = booksRepo();

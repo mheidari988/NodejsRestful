@@ -1,5 +1,5 @@
 const express = require("express");
-const { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } = require("http-status-codes");
+const { ReasonPhrases, StatusCodes } = require("http-status-codes");
 
 function routes(booksRepo) {
     const bookRouter = express.Router();
@@ -16,28 +16,33 @@ function routes(booksRepo) {
             res.status(StatusCodes.OK).json(await booksRepo.getAll(query));
         });
 
+    bookRouter.use("/books/:bookId", async (req, res, next) => {
+        const book = await booksRepo.getById(req.params.bookId);
+        if (!book) {
+            return res.sendStatus(StatusCodes.NOT_FOUND);
+        }
+        req.book = book;
+        return next();
+    });
+
     bookRouter.route("/books/:bookId")
-        .get(async (req, res) => {
-            res.status(StatusCodes.OK).json(await booksRepo.getById(req.params.bookId));
+        .get((req, res) => {
+            res.status(StatusCodes.OK).json(req.book);
         })
         .put(async (req, res) => {
-            if (req.params.bookId) {
-                const book = await booksRepo.getById(req.params.bookId);
-                if (!book) {
-                    res.status(StatusCodes.NOT_FOUND).json({ error: ReasonPhrases.NOT_FOUND });
-                }
-                book.title = req.body.title;
-                book.genre = req.body.genre;
-                book.author = req.body.author;
-                book.read = req.body.read;
-                const result = await booksRepo.update(book._id, book);
-                console.log(result);
-                res.status(StatusCodes.NO_CONTENT).send(ReasonPhrases.NO_CONTENT);
-            }
-            else {
-                res.status(StatusCodes.BAD_REQUEST).json({ error: ReasonPhrases.BAD_REQUEST });
-            }
+            const book = req.book;
+            book.title = req.body.title;
+            book.genre = req.body.genre;
+            book.author = req.body.author;
+            book.read = req.body.read;
+            await booksRepo.update(book._id, book);
+            res.status(StatusCodes.NO_CONTENT).send(ReasonPhrases.NO_CONTENT);
         })
+        .delete(async (req, res) => {
+            const result = await booksRepo.remove(req.params.bookId);
+            console.log(result);
+            res.status(StatusCodes.NO_CONTENT).send(ReasonPhrases.NO_CONTENT);
+        });
 
     return bookRouter;
 }
