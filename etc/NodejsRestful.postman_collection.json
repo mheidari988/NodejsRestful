@@ -1,0 +1,169 @@
+{
+	"info": {
+		"_postman_id": "420245d4-9296-437e-a79c-232d1ef7c436",
+		"name": "NodejsRestful",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6813806"
+	},
+	"item": [
+		{
+			"name": "GetAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}/api/books",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAll with query",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}/api/books?genre=Fantasy",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"books"
+					],
+					"query": [
+						{
+							"key": "genre",
+							"value": "Fantasy"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}/api/books/::id",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"books",
+						"::id"
+					],
+					"variable": [
+						{
+							"key": ":id",
+							"value": "63c5bd16392d64e5831881c0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"title\": \"TEST\",\r\n        \"genre\": \"TEST\",\r\n        \"author\": \"TEST\",\r\n        \"read\": false\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{url}}/api/books",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"War and Peace\",\r\n    \"genre\": \"Historical Fiction\",\r\n    \"author\": \"Lev Nikolayevich Tolstoy\",\r\n    \"read\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{url}}/api/books/::id",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"books",
+						"::id"
+					],
+					"variable": [
+						{
+							"key": ":id",
+							"value": "63c5bd16392d64e5831881c0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{url}}/api/books/::id",
+					"protocol": "http",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"books",
+						"::id"
+					],
+					"variable": [
+						{
+							"key": ":id",
+							"value": "63c690e320e2924dd4ffc313"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
