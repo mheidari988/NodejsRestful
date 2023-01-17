@@ -55,7 +55,22 @@ function booksRepo() {
         })
     }
 
-    return { getAll, getById, add };
+    async function update(id, book) {
+        return new Promise(async (resolve, rejects) => {
+            const client = new MongoClient(dbUrl);
+            try {
+                await client.connect();
+                const db = client.db(dbName)
+                const result = await db.collection(booksTableName).findOneAndReplace({ _id: id }, book);
+                resolve(result.ok);
+                await client.close();
+            } catch (error) {
+                rejects(error);
+            }
+        })
+    }
+
+    return { getAll, getById, add, update };
 }
 
 module.exports = booksRepo();
