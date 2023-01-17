@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 
 const express = require("express");
+const booksRepo = require("./repo/booksRepo");
 
 const app = express();
 const bookRouter = express.Router();
@@ -11,11 +12,22 @@ app.get("/", (req, res) => {
 });
 
 bookRouter.route("/books")
-    .get((req, res) => {
-        res.json({
-            title: "hello"
-        });
+    .post(async (req, res) => {
+        res.json({ result: "OK" });
+    })
+    .get(async (req, res) => {
+        const query = {};
+        if (req.query.genre) {
+            query.genre = req.query.genre;
+        }
+        res.json(await booksRepo.getAll(query));
     });
+
+bookRouter.route("/books/:bookId")
+    .get(async (req, res) => {
+        res.json(await booksRepo.getById(req.params.bookId));
+    })
+
 app.use("/api", bookRouter);
 
 app.listen(port, () => {

@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.1",
     "express": "^4.18.2",
     "mongodb": "^4.13.0",
     "nodemon": "^2.0.20"
@@ -20,8 +21,10 @@
       "node_modules/**/node_modules"
     ],
     "env": {
-      "PORT": 4000,
-      "NODE_ENV": "development"
+      "PORT": 3000,
+      "NODE_ENV": "development",
+      "CONN_STR": "mongodb://0.0.0.0:27017",
+      "DB_NAME": "bookAPI"
     }
   },
   "devDependencies": {
