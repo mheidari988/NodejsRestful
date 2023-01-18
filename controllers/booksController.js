@@ -14,7 +14,15 @@ function booksController(booksRepo) {
         if (req.query.genre) {
             query.genre = req.query.genre;
         }
-        res.status(StatusCodes.OK).json(await booksRepo.getAll(query));
+        const books = await booksRepo.getAll(query);
+        // Add hypermedia
+        const booksWithHypermedia = books.map((book) => {
+            const newBook = book;
+            newBook.links = {};
+            newBook.links.self = `http://${req.headers.host}/api/books/${book._id}`;
+            return newBook;
+        });
+        res.status(StatusCodes.OK).json(booksWithHypermedia);
     }
 
     return { post, get };
