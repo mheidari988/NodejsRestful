@@ -1,20 +1,15 @@
 const express = require("express");
+const booksController = require("../controllers/booksController");
+
 const { ReasonPhrases, StatusCodes } = require("http-status-codes");
 
-function routes(booksRepo) {
+async function routes(booksRepo) {
     const bookRouter = express.Router();
+    const controller = booksController(booksRepo);
 
     bookRouter.route("/books")
-        .post(async (req, res) => {
-            res.status(StatusCodes.OK).json({ id: await booksRepo.add(req.body) });
-        })
-        .get(async (req, res) => {
-            const query = {};
-            if (req.query.genre) {
-                query.genre = req.query.genre;
-            }
-            res.status(StatusCodes.OK).json(await booksRepo.getAll(query));
-        });
+        .post(controller.post)
+        .get(controller.get);
 
     bookRouter.use("/books/:bookId", async (req, res, next) => {
         const book = await booksRepo.getById(req.params.bookId);
