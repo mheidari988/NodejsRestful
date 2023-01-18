@@ -22,7 +22,11 @@ async function routes(booksRepo) {
 
     bookRouter.route("/books/:bookId")
         .get((req, res) => {
-            res.status(StatusCodes.OK).json(req.book);
+            const bookWithHypermedia = req.book;
+            bookWithHypermedia.links = {};
+            const genre = bookWithHypermedia.genre.replace(" ", "%20");
+            bookWithHypermedia.links.FilterByGenre = `http://${req.headers.host}/api/books?genre=${genre}`;
+            res.status(StatusCodes.OK).json(bookWithHypermedia);
         })
         .put(async (req, res) => {
             const book = req.book;
